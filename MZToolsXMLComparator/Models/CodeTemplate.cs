@@ -16,5 +16,7 @@ namespace MZToolsXMLComparator.Models
 		public string CommandName { get; set; }
 		public string Category { get; set; }
 		public int Language { get; set; }
+		public int Id { get; set; }
+		public Guid ParentGuid { get; set; }
 	}
 }

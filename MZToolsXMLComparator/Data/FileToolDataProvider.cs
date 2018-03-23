@@ -7,20 +7,26 @@ using System.Threading.Tasks;
 using System.Windows.Markup;
 using MZToolsXMLComparator.Models;
 using System.Xml;
+using MZToolsXMLComparator.ViewModels;
+
 namespace MZToolsXMLComparator.Data
 {
 	public class FileToolDataProvider : IFileToolDataProvider
 	{
-		public ICollection<CodeTemplate> GetTemplates(string xmlFilePath)
+		public ICollection<CodeTemplate> GetTemplates(FileToolViewModel parentModel)
 		{
+			//FileToolViewModel parent;
+
 			//XmlTextReader reader = new XmlTextReader(xmlFilePath);
 			ICollection<CodeTemplate> templates = new Collection<CodeTemplate>();
 			XmlDocument doc = new XmlDocument();
-			doc.Load(xmlFilePath);
+			doc.Load(parentModel.XmlFilePath);
 			if (doc.DocumentElement != null)
 			{
 				XmlNode xmlNodeList = doc.DocumentElement.SelectSingleNode("/Options/CodeTemplates");
 				if (xmlNodeList != null)
+				{
+					int id = 0;
 					foreach (XmlNode node in xmlNodeList.ChildNodes)
 					{
 						if (node.Name == "CodeTemplate")
@@ -46,14 +52,16 @@ namespace MZToolsXMLComparator.Data
 									template.Category = childNode.InnerText.Trim();
 								if (childNode.Name == "Language")
 									template.Language = Convert.ToInt32(childNode.InnerText);
-
+								
 
 							}
-							//XmlNode selectSingleNode = node.SelectSingleNode("/Description");
-							//if (selectSingleNode != null)
+							template.ParentGuid = parentModel.Guid;
+							template.Id = id;
 							templates.Add(template);
+							id+=1;
 						}
 					}
+				}
 			}
 			return templates;
 		}

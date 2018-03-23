@@ -13,16 +13,16 @@ namespace MZToolsXMLComparator.ViewModels
 	{
 		private IFileToolDataProvider dataProvider;
 		private ICollection<CodeTemplate> templates;
-		private string xmlFilePath;
-
-		public ICollection<CodeTemplate> Templates => templates ?? (templates = dataProvider.GetTemplates(xmlFilePath));
+		public string XmlFilePath { get; set; }
+		public Guid Guid;
+		public ICollection<CodeTemplate> Templates => templates ?? (templates = dataProvider.GetTemplates(this));
 
 		//public ICollection<CodeTemplate> Templates => templates ?? dataProvider.GetTemplates(xmlFilePath);
 
 		public string FileName()
 		{
 			string result = "";
-			DirectoryInfo dir=new DirectoryInfo(xmlFilePath);
+			DirectoryInfo dir=new DirectoryInfo(XmlFilePath);
 			result = dir.Name;
 			return result;
 		}
@@ -34,7 +34,7 @@ namespace MZToolsXMLComparator.ViewModels
 			Console.WriteLine(@"Contents:");
 			foreach (CodeTemplate template in templates)
 			{
-				Console.WriteLine("	"+template.Category+@" -- " + template.Description);
+				Console.WriteLine("	"+(template.Id+1).ToString()+@". "+template.Category+@" -- " + template.Description);
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace MZToolsXMLComparator.ViewModels
 			Console.WriteLine(@"Contents:");
 			foreach (CodeTemplate template in templates)
 			{
-				Console.WriteLine(@"Template");
+				Console.WriteLine(@"Template " + (template.Id+1).ToString());
 				Console.WriteLine(@"	" + template.Category + @" -- " + template.Description);
 				Console.WriteLine(@"	Template by: "+template.Author);
 				Console.WriteLine(@"	Expansion Keyword: " + template.ExpansionKeyword);
@@ -59,8 +59,9 @@ namespace MZToolsXMLComparator.ViewModels
 		}
 		public FileToolViewModel(IFileToolDataProvider data, string xmlFile)
 		{
-			xmlFilePath = xmlFile;
+			XmlFilePath = xmlFile;
 			dataProvider = data;
+			Guid=Guid.NewGuid();
 		}
 
 	}

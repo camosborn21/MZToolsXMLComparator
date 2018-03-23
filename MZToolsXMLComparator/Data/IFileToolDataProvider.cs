@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MZToolsXMLComparator.Models;
+using MZToolsXMLComparator.ViewModels;
 
 namespace MZToolsXMLComparator.Data
 {
 	public interface IFileToolDataProvider
 	{
-		ICollection<CodeTemplate> GetTemplates(string xmlFilePath);
+		ICollection<CodeTemplate> GetTemplates(FileToolViewModel parentModel);
 
 	}
 }

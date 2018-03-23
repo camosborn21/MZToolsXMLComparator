@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MZToolsXMLComparator.Data;
 using MZToolsXMLComparator.Models;
+using MZToolsXMLComparator.Utilities;
 using MZToolsXMLComparator.ViewModels;
 
 namespace ComparatorConsole
@@ -47,6 +48,7 @@ namespace ComparatorConsole
 				Console.WriteLine(@"L. [LOAD]" + GetAlignmentSpacing(4) + @"Load an additional xml file for comparison.");
 				Console.WriteLine(@"D. [DISPLAY]" + GetAlignmentSpacing(7) +
 				                  @"Display overview or full contents of a loaded file.");
+				Console.WriteLine(@"C. [COMPARE]"+GetAlignmentSpacing(7)+@"Compare all files loaded to the buffer.");
 				HorizontalRule();
 				Lines(2);
 				Console.Write(@"Your choice is: ");
@@ -68,13 +70,32 @@ namespace ComparatorConsole
 					case 'd':
 						DisplayXmlFileContents();
 						break;
+
+					case 'c':
+					case 'C':
+						CompareXmlFilesInBuffer();
+						break;
 				}
 			}
 		}
 
+		private void CompareXmlFilesInBuffer()
+		{
+			Line();
+			if (viewModels.Count < 2)
+			{
+				Console.WriteLine(@"There aren't enough files loaded to run a comparison. You need at least 2...duh.");
+				return;
+			}
+			Lines(2);
+			Console.WriteLine(@"Running Comparison of Loaded Files");
+			Comparator comparator = new Comparator(viewModels);
+			comparator.PrintUniqueTemplateDetails();
+		}
+
 		private void DisplayXmlFileContents()
 		{
-			int selectedFile = Console.ReadKey().KeyChar;
+			int selectedFile = -1;
 			if (viewModels.Count > 1)
 			{
 				Console.WriteLine(@"Which file would you like to display?");
