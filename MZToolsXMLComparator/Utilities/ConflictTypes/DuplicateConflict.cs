@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MZToolsXMLComparator.Models;
 
 namespace MZToolsXMLComparator.Utilities.ConflictTypes
@@ -10,6 +11,11 @@ namespace MZToolsXMLComparator.Utilities.ConflictTypes
 		public string Description { get; set; }
 		public ICollection<CodeTemplate> ConflictedTemplates { get; set; }
 		public CodeTemplate ResolutionTemplate { get; set; }
+		private ConsoleUiTools _c;
+		public DuplicateConflict()
+		{
+			_c = new ConsoleUiTools();
+		}
 		public void PrintInfo()
 		{
 			Console.WriteLine(@"	Duplicate Conflict: ");
@@ -21,7 +27,11 @@ namespace MZToolsXMLComparator.Utilities.ConflictTypes
 
 		public void Resolve()
 		{
-			throw new NotImplementedException();
+			ResolutionTemplate = ConflictedTemplates.First();
+			_c.Lines(2);
+			_c.HorizontalRule();
+			Console.WriteLine(@"** DUPLICATE CODE CONFLICT (Autoresolved) **");
+			Console.WriteLine(ResolutionTemplate.Description);
 		}
 	}
 }
