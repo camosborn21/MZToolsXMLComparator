@@ -56,11 +56,13 @@
     </ApplicationDefinition>
     <Compile Include="Data\FileToolDataProvider.cs" />
     <Compile Include="Data\IFileToolDataProvider.cs" />
+    <Compile Include="Utilities\AccessConflict.cs" />
     <Compile Include="Utilities\Comparator.cs" />
     <Compile Include="Utilities\DuplicateConflict.cs" />
     <Compile Include="Utilities\IConflictTemplate.cs" />
     <Compile Include="Utilities\ImperfectCopyConflict.cs" />
     <Compile Include="Utilities\LocationConflict.cs" />
+    <Compile Include="Utilities\RenamingConflict.cs" />
     <Compile Include="ViewModels\FileToolViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Page Include="MainWindow.xaml">

@@ -12,6 +12,7 @@ namespace MZToolsXMLComparator.Utilities
 		string Description { get; set; }
 		ICollection<CodeTemplate> ConflictedTemplates { get; set; }
 		CodeTemplate ResolutionTemplate { get; set; }
+		void PrintInfo();
 		void Resolve();
 	}
 }
