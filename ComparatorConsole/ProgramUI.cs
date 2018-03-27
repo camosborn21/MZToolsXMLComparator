@@ -15,10 +15,12 @@ namespace ComparatorConsole
 	public class ProgramUI
 	{
 		private ICollection<FileToolViewModel> viewModels;
+		private readonly ConsoleUiTools _c;
 
 		public ProgramUI()
 		{
 			viewModels = new Collection<FileToolViewModel>();
+			_c = new ConsoleUiTools();
 		}
 		public void Debug_Print()
 		{
@@ -35,25 +37,26 @@ namespace ComparatorConsole
 		}
 		public void StartInterface()
 		{
+			const int menuSpacing = 20;
 			bool inMenu = true;
 			char keyPressed;
 			while (inMenu)
 			{
-				Lines(2);
-				HorizontalRule();
+				_c.Lines(2);
+				_c.HorizontalRule();
 				Console.WriteLine(@"**  MENU:(press a character to select an option)  **");
-				HorizontalRule();
+				_c.HorizontalRule();
 				WriteLoadedFileList();
-				Console.WriteLine(@"Q. [QUIT]" + GetAlignmentSpacing(4) + @"Quit.");
-				Console.WriteLine(@"L. [LOAD]" + GetAlignmentSpacing(4) + @"Load an additional xml file for comparison.");
-				Console.WriteLine(@"D. [DISPLAY]" + GetAlignmentSpacing(7) +
+				Console.WriteLine(@"Q. [QUIT]" + _c.GetAlignmentSpacing(4, menuSpacing) + @"Quit.");
+				Console.WriteLine(@"L. [LOAD]" + _c.GetAlignmentSpacing(4, menuSpacing) + @"Load an additional xml file for comparison.");
+				Console.WriteLine(@"D. [DISPLAY]" + _c.GetAlignmentSpacing(7, menuSpacing) +
 													@"Display overview or full contents of a loaded file.");
-				Console.WriteLine(@"C. [COMPARE]" + GetAlignmentSpacing(7) + @"Compare all files loaded to the buffer.");
-				HorizontalRule();
-				Lines(2);
+				Console.WriteLine(@"C. [COMPARE]" + _c.GetAlignmentSpacing(7, menuSpacing) + @"Compare all files loaded to the buffer.");
+				_c.HorizontalRule();
+				_c.Lines(2);
 				Console.Write(@"Your choice is: ");
 				keyPressed = Console.ReadKey().KeyChar;
-				Line();
+				_c.Line();
 				switch (keyPressed)
 				{
 					case 'Q':
@@ -81,13 +84,13 @@ namespace ComparatorConsole
 
 		private void CompareXmlFilesInBuffer()
 		{
-			Line();
+			_c.Line();
 			if (viewModels.Count < 2)
 			{
 				Console.WriteLine(@"There aren't enough files loaded to run a comparison. You need at least 2...duh.");
 				return;
 			}
-			Lines(2);
+			_c.Lines(2);
 			Console.WriteLine(@"Running Comparison of Loaded Files");
 			Comparator comparator = new Comparator(viewModels);
 			//comparator.PrintComparisonFindings();
@@ -113,12 +116,12 @@ namespace ComparatorConsole
 					selectedFile = Int32.Parse(Console.ReadKey().KeyChar.ToString());
 				}
 				selectedFile -= 1;
-				Lines(2);
+				_c.Lines(2);
 			}
 			else if (viewModels.Count == 1)
 			{
 				selectedFile = 0;
-				Lines(2);
+				_c.Lines(2);
 			}
 			else if (viewModels.Count == 0)
 			{
@@ -126,21 +129,21 @@ namespace ComparatorConsole
 				return;
 			}
 
-			Line();
+			_c.Line();
 			Console.WriteLine(@"Display Xml file: " + viewModels.ElementAt(selectedFile).FileName());
 			Console.WriteLine(@"Would you like to display: ");
 			Console.WriteLine(@"1. Basic Information and Template Names");
 			Console.WriteLine(@"2. Detailed Information Including Template Text");
 			Console.Write(@"Your choice is: ");
 			int selectedDetail = Int32.Parse(Console.ReadKey().KeyChar.ToString());
-			Line();
+			_c.Line();
 			while (selectedDetail != 1 && selectedDetail != 2)
 			{
 				Console.WriteLine(@"Invalid option. Please choose your level of detail: 1 or 2.");
 				selectedDetail = Int32.Parse(Console.ReadKey().KeyChar.ToString());
-				Line();
+				_c.Line();
 			}
-			Line();
+			_c.Line();
 			switch (selectedDetail)
 			{
 				case 1:
@@ -159,7 +162,7 @@ namespace ComparatorConsole
 
 			FileToolViewModel toolView = new FileToolViewModel(new FileToolDataProvider(), fileName);
 			viewModels.Add(toolView);
-			Line();
+			_c.Line();
 			Console.WriteLine(@"File successfully parsed. " + toolView.Templates.Count + @" code templates found");
 		}
 		private void WriteLoadedFileList()
@@ -171,34 +174,9 @@ namespace ComparatorConsole
 				{
 					Console.WriteLine(model.FileName());
 				}
-				HorizontalRule();
+				_c.HorizontalRule();
 			}
 		}
 
-		private string GetAlignmentSpacing(int titleLen)
-		{
-			string result = "";
-			for (int i = 0; i < 20 - titleLen; i++)
-			{
-				result = result + " ";
-			}
-			return result;
-		}
-
-		void Line()
-		{
-			Console.WriteLine();
-		}
-		void HorizontalRule()
-		{
-			Console.WriteLine(@"****************************************************");
-		}
-		void Lines(int lineCount)
-		{
-			for (int i = 1; i < lineCount; i++)
-			{
-				Console.WriteLine();
-			}
-		}
 	}
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MZToolsXMLComparator.Models;
+using MZToolsXMLComparator.Utilities.ConflictTypes;
 using MZToolsXMLComparator.ViewModels;
 
 namespace MZToolsXMLComparator.Utilities
