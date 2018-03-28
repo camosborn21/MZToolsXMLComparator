@@ -17,6 +17,12 @@ namespace ComparatorConsole
 		private ICollection<FileToolViewModel> viewModels;
 		private readonly ConsoleUiTools _c;
 
+		private Comparator _comparator
+		{
+			get { return _comparator ?? (_comparator = new Comparator(viewModels)); }
+			set { _comparator = value; }
+		}
+
 		public ProgramUI()
 		{
 			viewModels = new Collection<FileToolViewModel>();
@@ -51,7 +57,9 @@ namespace ComparatorConsole
 				Console.WriteLine(@"L. [LOAD]" + _c.GetAlignmentSpacing(4, menuSpacing) + @"Load an additional xml file for comparison.");
 				Console.WriteLine(@"D. [DISPLAY]" + _c.GetAlignmentSpacing(7, menuSpacing) +
 													@"Display overview or full contents of a loaded file.");
-				Console.WriteLine(@"C. [COMPARE]" + _c.GetAlignmentSpacing(7, menuSpacing) + @"Compare all files loaded to the buffer.");
+				Console.WriteLine(@"C. [COMPARE]" + _c.GetAlignmentSpacing(7, menuSpacing) + @"Compare all files loaded to the buffer."); 
+				Console.WriteLine(@"R. [RESOLVE]" + _c.GetAlignmentSpacing(7,20)+@"Resolve conflicted templates.");
+				Console.WriteLine(@"W. [WRITE]" + _c.GetAlignmentSpacing(5,menuSpacing)+@"Write the final output file.");
 				_c.HorizontalRule();
 				_c.Lines(2);
 				Console.Write(@"Your choice is: ");
@@ -78,8 +86,28 @@ namespace ComparatorConsole
 					case 'C':
 						CompareXmlFilesInBuffer();
 						break;
+
+					case 'r':
+					case 'R':
+						ResolveTemplateConflicts();
+						break;
+
+					case 'w':
+					case 'W':
+						WriteFile();
+						break;
 				}
 			}
+		}
+
+		private void WriteFile()
+		{
+			throw new NotImplementedException();
+		}
+
+		private void ResolveTemplateConflicts()
+		{
+			throw new NotImplementedException();
 		}
 
 		private void CompareXmlFilesInBuffer()
@@ -92,7 +120,7 @@ namespace ComparatorConsole
 			}
 			_c.Lines(2);
 			Console.WriteLine(@"Running Comparison of Loaded Files");
-			Comparator comparator = new Comparator(viewModels);
+			_comparator.PrintComparisonFindings();
 			//comparator.PrintComparisonFindings();
 		}
 

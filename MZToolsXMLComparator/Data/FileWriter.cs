@@ -55,9 +55,27 @@ namespace MZToolsXMLComparator.Data
 				commentElement.AppendChild(commentText);
 				templateElement.AppendChild(commentElement);
 
+				XmlElement expansionKeywordElement = doc.CreateElement(string.Empty, "ExpansionKeyword", string.Empty);
+				XmlText expansionKeywordText = doc.CreateTextNode(template.ExpansionKeyword);
+				expansionKeywordElement.AppendChild(expansionKeywordText);
+				templateElement.AppendChild(expansionKeywordElement);
 
+				XmlElement commandNameElement = doc.CreateElement(string.Empty, "CommandName", string.Empty);
+				XmlText commandNameText = doc.CreateTextNode(template.CommandName);
+				commandNameElement.AppendChild(commandNameText);
+				templateElement.AppendChild(commandNameElement);
+
+				XmlElement categoryElement = doc.CreateElement(string.Empty, "Category", string.Empty);
+				XmlText categoryText = doc.CreateTextNode(template.Category);
+				categoryElement.AppendChild(categoryText);
+				templateElement.AppendChild(categoryElement);
+
+				XmlElement languageElement = doc.CreateElement(string.Empty, "Language", string.Empty);
+				XmlText languageText = doc.CreateTextNode(template.Language.ToString());
+				languageElement.AppendChild(languageText);
+				templateElement.AppendChild(languageElement);
 			}
-
+			doc.Save("C:\\Users\\camerono\\Desktop\\XmlOut.xml");
 		}
 	}
 }
