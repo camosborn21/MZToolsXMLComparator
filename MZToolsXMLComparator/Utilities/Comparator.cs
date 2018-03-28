@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MZToolsXMLComparator.Data;
 using MZToolsXMLComparator.Models;
 using MZToolsXMLComparator.Utilities.ConflictTypes;
 using MZToolsXMLComparator.ViewModels;
@@ -15,20 +16,56 @@ namespace MZToolsXMLComparator.Utilities
 		private readonly ICollection<FileToolViewModel> _templateFiles;
 		private ICollection<CodeTemplate> uniqueCodeTemplates = new Collection<CodeTemplate>();
 		private ICollection<IConflictTemplate> conflictTemplates = new Collection<IConflictTemplate>();
+		private ConsoleUiTools _c;
 		public Comparator(ICollection<FileToolViewModel> viewModels)
 		{
 			_templateFiles = viewModels;
 			RunComparison();
+			_c = new ConsoleUiTools();
 		}
 
 		public void ResolveConflicts()
 		{
 			while (conflictTemplates.Count(c => c.ResolutionTemplate == null) > 0)
 			{
-				conflictTemplates.First(c=>c.ResolutionTemplate==null).Resolve();
+				conflictTemplates.First(c => c.ResolutionTemplate == null).Resolve();
 			}
 		}
 
+		public void WriteOutputFile()
+		{
+			if (conflictTemplates.Count(c => c.ResolutionTemplate == null) > 0)
+			{
+				Console.WriteLine(@"Not all conflicts have been resolved. All conflicts must have a resolution template selected before an output file can be written.");
+				Console.WriteLine(@"Would you like to inspect and resolve conflicts now? (Y/N)");
+				char keyPressed = Console.ReadKey().KeyChar;
+				while (keyPressed != 'Y' || keyPressed != 'N' || keyPressed != 'y' || keyPressed != 'n')
+				{
+					Console.WriteLine(@"Invalid Selection. Would you like to inspect and resolve conflicts now? (Y/N)");
+					keyPressed = Console.ReadKey().KeyChar;
+				}
+				if (keyPressed == 'y' || keyPressed == 'Y')
+				{
+					ResolveConflicts();
+				}
+				return;
+			}
+
+			//[3/27/2018 17:39] Cameron Osborn: Collect all resolution templates from conflicts and all unique templates into new Collection
+			Collection<CodeTemplate> finalTemplates = new Collection<CodeTemplate>();
+			foreach (IConflictTemplate conflictTemplate in conflictTemplates)
+			{
+				finalTemplates.Add(conflictTemplate.ResolutionTemplate);
+			}
+			foreach (CodeTemplate uniqueCodeTemplate in uniqueCodeTemplates)
+			{
+				finalTemplates.Add(uniqueCodeTemplate);
+			}
+
+
+			FileWriter writer = new FileWriter(finalTemplates);
+			writer.WriteOutputXmlFile();
+		}
 
 		public void RunComparison()
 		{
@@ -153,7 +190,7 @@ namespace MZToolsXMLComparator.Utilities
 					}
 
 					//[3/26/2018 13:24] camerono: Insert checks for different description but same code etc.
-					if (codeTemplate!=comparisonTemplate && codeTemplate.Text == comparisonTemplate.Text && codeTemplate.Description!=comparisonTemplate.Description && codeTemplate.Language == comparisonTemplate.Language)
+					if (codeTemplate != comparisonTemplate && codeTemplate.Text == comparisonTemplate.Text && codeTemplate.Description != comparisonTemplate.Description && codeTemplate.Language == comparisonTemplate.Language)
 					{
 						if (conflictTemplates.OfType<RenamingConflict>()
 							.Any(c => c.ConflictedTemplates.Any(d => d.Text == codeTemplate.Text)))

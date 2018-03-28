@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\FileToolDataProvider.cs" />
+    <Compile Include="Data\FileWriter.cs" />
     <Compile Include="Data\IFileToolDataProvider.cs" />
     <Compile Include="Utilities\ConflictTypes\AccessConflict.cs" />
     <Compile Include="Utilities\Comparator.cs" />

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Markup;
 using MZToolsXMLComparator.Models;
 using System.Xml;
+using MZToolsXMLComparator.Utilities;
 using MZToolsXMLComparator.ViewModels;
 
 namespace MZToolsXMLComparator.Data
@@ -65,5 +66,7 @@ namespace MZToolsXMLComparator.Data
 			}
 			return templates;
 		}
+
+
 	}
 }
